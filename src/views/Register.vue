@@ -55,6 +55,7 @@ export default {
     return {
       registerUser: {
         username: "",
+        email: "",
         password: "",
         password2: "",
         role: ""
