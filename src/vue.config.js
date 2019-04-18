@@ -43,14 +43,12 @@ module.exports = {
         https: false,
         hotOnly: false,
         proxy: { // 配置跨域
-            '/sys_back': {
-                target: 'https://wxapp.proflu.cn/sys_back',
-                ws: true,
-                changOrigin: true,
-                pathRewrite: {
-                    '^/sys_back':""
-                }
-            }
+            "/sys_back/":{
+                target:"https://wxapp.proflu.cn/sys_back",
+                pathRewrite: {"^/sys_back":""},
+                changeOrigin: true,
+                secure: false
+              }
         },
         before: app => { }
     }

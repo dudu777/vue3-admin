@@ -18,12 +18,15 @@
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="loginUser.password" placeholder="请输入密码"></el-input>
           </el-form-item>
-          
+
           <el-form-item>
             <el-button type="primary" class="submit_btn" @click="submitForm('loginForm')">登录</el-button>
           </el-form-item>
           <div class="tip_register">
-              <p>还没有账号？现在<router-link to="/register">注册</router-link></p>
+            <p>
+              还没有账号？现在
+              <router-link to="/register">注册</router-link>
+            </p>
           </div>
         </el-form>
       </div>
@@ -32,6 +35,8 @@
 </template>
 
 <script>
+import jwt_decode from "jwt-decode";
+
 export default {
   name: "register",
   components: {},
@@ -47,55 +52,69 @@ export default {
             type: "email",
             required: true,
             message: "邮箱格式不正确",
-            trigger: 'blur'
+            trigger: "blur"
           }
         ],
         password: [
           {
             required: true,
             message: "密码不能为空",
-            trigger: 'blur'
+            trigger: "blur"
           },
           {
             min: 6,
             max: 30,
             message: "密码长度在6-30之间",
-            trigger: 'blur'
+            trigger: "blur"
           }
         ]
       }
-    }
+    };
   },
   methods: {
-      submitForm(formName){
-          this.$refs[formName].validate((valid) => {
-          if (valid) { 
-            this.$axios.post('sys_back/log/login',this.loginUser)
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+            var param = {
+                username: 'aaa',
+                password: '123456'
+            }
+          this.$axios
+            .post("/sys_back/log/login", param)
             .then(response => {
-                coonsole.log(response)
+              console.log(response);
               // token
-              const { token } = res.data;
-            //   token = '12345678910'
-            //   localStorage.setItem("token",token)
-            //   this.$router.push('/index')
+              // const { token } = res.data;
+              const token = "32fsfsd88dd85f8ser5gdv7g";
+          localStorage.setItem("token", token);
+          // 解析token
+          const decoded = jwt_decode(token);
+          // console.log(decoded)
+
+          // token存储在vuex中 decoded是空的话，代表没授权，有内容的话 有授权
+          this.$store.dispatch("setAuthenticated", !this.isEmpty(decoded));
+          this.$store.dispatch("setUser", decoded);
+          this.$router.push("/index");
             });
-            const token = '12345678910'
-              localStorage.setItem("token",token)
-              this.$router.push('/index')
-            
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-
-      }
-
+          this.$router.push("/index");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    isEmpty(value) {
+      return (
+        value === undefind ||
+        value === null ||
+        (typeof value === "object" && Object.keys(value).length === 0) ||
+        (typeof value === "string" && value.trim().length === 0)
+      );
+    }
   }
 };
 </script>
 <style scoped>
-
 .login {
   position: relative;
   width: 100%;
@@ -136,5 +155,4 @@ export default {
 .tip_register p a {
   color: #409eff;
 }
-
 </style>

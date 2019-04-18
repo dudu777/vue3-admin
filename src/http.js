@@ -51,7 +51,7 @@ axios.interceptors.response.use(response => {
         router.push('/login')
 
     }
-    return Promise.reject(err)
+    return Promise.reject(error)
 })
 
 export default axios
