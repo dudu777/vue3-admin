@@ -75,10 +75,14 @@ export default {
                 coonsole.log(response)
               // token
               const { token } = res.data;
-              token = '12345678910'
+            //   token = '12345678910'
+            //   localStorage.setItem("token",token)
+            //   this.$router.push('/index')
+            });
+            const token = '12345678910'
               localStorage.setItem("token",token)
               this.$router.push('/index')
-            });
+            
           } else {
             console.log('error submit!!');
             return false;
