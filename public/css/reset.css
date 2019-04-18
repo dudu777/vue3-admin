@@ -56,7 +56,6 @@ table {
     right: 0;
     bottom: 0;
     left: 0;
-    -webkit-transform: opacity .3s;
     transition: opacity .3s;
 }
 .el-loading-spinner{
